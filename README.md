@@ -1,0 +1,89 @@
+
+yuxuan
+localhost
+端口：3306
+用户名：root
+密码：root
+
+安装mysql服务：https://blog.csdn.net/qq_44443986/article/details/118487968
+安装Navicat for MySQL客户端：https://jingyan.baidu.com/article/c74d600072b6584e6a595d8c.html
+数据库sql语句学习：https://www.runoob.com/mysql/mysql-create-tables.html
+
+//创建数据库
+CREATE DATABASE yuxuan;
+show databases;
+
+//解决错误[Err] 1055 - Expression #1 of ORDER BY clause is not in GROUP BY clause and contains nonaggregated column 'information_schema.PROFILING.SEQ' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_gr
+select version(),
+@@sql_mode;SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+//创建用户表
+CREATE TABLE IF NOT EXISTS `user`(
+   `id` INT UNSIGNED AUTO_INCREMENT COMMENT '主键自增',
+   `phone` VARCHAR(100) NOT NULL COMMENT '手机',
+   `password` VARCHAR(100) NOT NULL COMMENT '密码',
+   `name` VARCHAR(100) NOT NULL COMMENT '姓名',
+   `sex` INT DEFAULT NULL COMMENT '性别0女，1男',
+   `age` INT DEFAULT NULL COMMENT '年龄',
+   `occupation` INT DEFAULT 0 COMMENT '职业，0学生，1管理员',
+   `school` INT DEFAULT NULL COMMENT '学校(外键：classgroup)',
+   `school_name` VARCHAR(100) DEFAULT NULL COMMENT '学校',
+   `faculty` INT DEFAULT NULL COMMENT '院系(外键：classgroup)',
+   `faculty_name` VARCHAR(100) DEFAULT NULL COMMENT '院系',
+   `class` INT DEFAULT NULL COMMENT '班级(外键：classgroup)',
+   `class_name` VARCHAR(100) DEFAULT NULL COMMENT '班级',
+   `number` VARCHAR(40) DEFAULT NULL COMMENT '学号',
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+show tables;
+
+//学校、院系、班级表（活动创建单位）
+CREATE TABLE IF NOT EXISTS `classgroup`(
+   `id` INT UNSIGNED AUTO_INCREMENT COMMENT '主键自增',
+   `name` VARCHAR(100) NOT NULL COMMENT '名称',
+   `address` VARCHAR(100) DEFAULT NULL COMMENT '地址',
+   `parent_id` INT UNSIGNED NOT NULL COMMENT '父级（外键：classgroup）',
+   `type` INT UNSIGNED NOT NULL COMMENT '类型：0学校、1院系、2班级',
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+//活动表
+CREATE TABLE IF NOT EXISTS `activity`(
+   `id` INT UNSIGNED AUTO_INCREMENT COMMENT '主键自增',
+   `name` VARCHAR(100) NOT NULL COMMENT '活动名称',
+   `address` VARCHAR(100) DEFAULT NULL COMMENT '活动地址',
+   `signaddress` VARCHAR(100) DEFAULT NULL COMMENT '签到地址',
+    `type` INT UNSIGNED NOT NULL COMMENT '活动类型：0学校、1院系、2班级',
+    `create_user` INT UNSIGNED NOT NULL COMMENT '创建人（外键：user）',
+    `create_user_name` VARCHAR(100) DEFAULT NULL COMMENT '创建人名称',
+    `classgroup` INT UNSIGNED NOT NULL COMMENT '发布单位（外键：classgroup）',
+   `introduce` VARCHAR(500) NOT NULL COMMENT '介绍',
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+//活动报名表
+CREATE TABLE IF NOT EXISTS `activity_sign`(
+   `id` INT UNSIGNED AUTO_INCREMENT COMMENT '主键自增',
+   `active_name` VARCHAR(100) NOT NULL COMMENT '活动名称',
+    `address` VARCHAR(100) DEFAULT NULL COMMENT '活动地址',
+    `type` INT UNSIGNED NOT NULL COMMENT '活动类型：0学校、1院系、2班级',
+    `create_user` INT UNSIGNED NOT NULL COMMENT '创建人（外键：user）',
+    `create_user_name` VARCHAR(100) DEFAULT NULL COMMENT '创建人名称',
+    `classgroup` INT UNSIGNED NOT NULL COMMENT '发布单位（外键：classgroup）',
+    `introduce` VARCHAR(500) NOT NULL COMMENT '介绍',
+    `user` INT UNSIGNED NOT NULL COMMENT '报名人（外键：user）',
+    `user_name` VARCHAR(100) DEFAULT NULL COMMENT '报名人姓名',
+    `phone` VARCHAR(100) DEFAULT NULL COMMENT '报名人电话',
+   `sex` INT DEFAULT NULL COMMENT '性别0女，1男',
+   `age` INT DEFAULT NULL COMMENT '年龄',
+   `school` INT DEFAULT NULL COMMENT '学校(外键：classgroup)',
+   `school_name` VARCHAR(100) DEFAULT NULL COMMENT '学校',
+   `faculty` INT DEFAULT NULL COMMENT '院系(外键：classgroup)',
+   `faculty_name` VARCHAR(100) DEFAULT NULL COMMENT '院系',
+   `class` INT DEFAULT NULL COMMENT '班级(外键：classgroup)',
+   `class_name` VARCHAR(100) DEFAULT NULL COMMENT '班级',
+   `signin` INT DEFAULT 0 COMMENT '签到：0未签到、1已签到',
+   PRIMARY KEY ( `id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

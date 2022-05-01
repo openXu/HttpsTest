@@ -11,5 +11,6 @@ server:
     # 双向认证，服务端校验客户端
     client-auth: need             # 开启客户端验证 ClientAuth.need
     trust-store: classpath:openxu_client_cers.p12   # 信任库：存放了服务端信任的客户端证书的公钥文件
-   # trust-store-password: 123456789
+    # 此处并不需要提供密钥库的口令密码，因为口令密码是保护密钥库中的私钥的，而上面配置的信任库中只有客户端的公钥证书
+    # trust-store-password: 123456789
 
