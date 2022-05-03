@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.openxu.api.mapper.IUserMapper">
+
+    <!--Oracle中 ;号必定报错  不要加;号  -->
+    <select id="findAll" resultType="com.openxu.api.module.User">
+        select * from demo_user
+    </select>
+    <select id="insert">
+        insert into demo_user values (null,"hy",20,"jjb")
+    </select>
+    <update id="update">
+        update demo_user set name = "黑熊精" where id = 232
+    </update>
+    <delete id="delete">
+        delete from demo_user where id = 232
+    </delete>
+</mapper>
